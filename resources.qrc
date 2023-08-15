@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file>images/fallout2boy.jpg</file>
+        <!-- Add more file elements for other resources -->
+    </qresource>
+</RCC>
