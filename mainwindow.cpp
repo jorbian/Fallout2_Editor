@@ -179,7 +179,7 @@ void MainWindow::on_Luck_Down_clicked()
 
 void MainWindow::on_load_file_clicked()
 {
-    QString filePath = QFileDialog::getOpenFileName(this, "Select a File", "", "All Files (*)");
+    this -> filePath = QFileDialog::getOpenFileName(this, "Select a File", "", "All Files (*)");
 
     if (!filePath.isEmpty()) {
         std::ifstream hexFile(filePath.toStdString(), std::ios::binary);
@@ -276,7 +276,7 @@ void MainWindow::on_load_file_clicked()
 void MainWindow::on_apply_changes_clicked()
 {
 if (!filePath.isEmpty()) {
-        std::fstream hexFile(filePath.toStdString(), std::ios::binary);
+        std::fstream hexFile(filePath.toStdString(), std::ios::binary | std::ios::in | std::ios::out);
 
         if (!hexFile.is_open()) {
             qDebug() << "Failed to open the file.";
@@ -318,30 +318,30 @@ if (!filePath.isEmpty()) {
             int stroffset, peroffset, endoffset, charoffset, intoffset, agiloffset, luckoffset;
             stroffset = offset;
             hexFile.write(reinterpret_cast<const char*>(&strnum), sizeof(strnum));
-            qDebug() << "Strength value:" << static_cast<int>(newValue[0]);
+            qDebug() << "Strength value:" << static_cast<int>(strnum);
             hexFile.seekg(static_cast<std::streamoff>(stroffset) + 4); // Move to the new offset + 4 bytes
             peroffset = stroffset += 4;
             hexFile.write(reinterpret_cast<const char*>(&pernum), sizeof(pernum));
-            qDebug() << "Perception value:" << static_cast<int>(newValue[0]);
+            qDebug() << "Perception value:" << static_cast<int>(pernum);
             hexFile.seekg(static_cast<std::streamoff>(peroffset) + 4); // Move to the new offset + 4 bytes
             hexFile.write(reinterpret_cast<const char*>(&endnum), sizeof(endnum));
             endoffset = peroffset += 4;
-            qDebug() << "Endurance value:" << static_cast<int>(newValue[0]);
+            qDebug() << "Endurance value:" << static_cast<int>(endnum);
             hexFile.seekg(static_cast<std::streamoff>(endoffset) + 4); // Move to the new offset + 4 bytes
             hexFile.write(reinterpret_cast<const char*>(&charnum), sizeof(charnum));
             charoffset = endoffset += 4;
-            qDebug() << "Charisma value:" << static_cast<int>(newValue[0]);
+            qDebug() << "Charisma value:" << static_cast<int>(charnum);
             hexFile.seekg(static_cast<std::streamoff>(charoffset) + 4); // Move to the new offset + 4 bytes
             hexFile.write(reinterpret_cast<const char*>(&intnum), sizeof(intnum));
             intoffset = charoffset += 4;
-            qDebug() <<  "Intelligence value:" << static_cast<int>(newValue[0]);
+            qDebug() <<  "Intelligence value:" << static_cast<int>(intnum);
             hexFile.seekg(static_cast<std::streamoff>(intoffset) + 4); // Move to the new offset + 4 bytes
             hexFile.write(reinterpret_cast<const char*>(&aginum), sizeof(aginum));
             agiloffset = intoffset += 4;
-            qDebug() << "Agility value:" << static_cast<int>(newValue[0]);
+            qDebug() << "Agility value:" << static_cast<int>(aginum);
             hexFile.seekg(static_cast<std::streamoff>(agiloffset) + 4); // Move to the new offset + 4 bytes
             hexFile.write(reinterpret_cast<const char*>(&strnum), sizeof(strnum));
-            qDebug() << "Luck value:" << static_cast<int>(newValue[0]);
+            qDebug() << "Luck value:" << static_cast<int>(lucknum);
         }
         else
         {
