@@ -54,8 +54,11 @@ private slots:
 
     void on_load_file_clicked();
 
+    void on_apply_changes_clicked();
+
 private:
     Ui::MainWindow *ui;
     int strnum, pernum, endnum, charnum, intnum, aginum, lucknum;
+    QString filePath;
 };
 #endif // MAINWINDOW_H

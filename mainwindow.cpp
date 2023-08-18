@@ -271,3 +271,85 @@ void MainWindow::on_load_file_clicked()
 }
 
 }
+
+
+void MainWindow::on_apply_changes_clicked()
+{
+if (!filePath.isEmpty()) {
+        std::fstream hexFile(filePath.toStdString(), std::ios::binary);
+
+        if (!hexFile.is_open()) {
+            qDebug() << "Failed to open the file.";
+            return;
+        }
+
+        const int patternLength = 4; // Adjust to match the length of your pattern
+        const char desiredPattern[5] = "\x00\x00\x46\x50"; // Example pattern as a string
+
+        bool patternFound = false;
+        std::streampos offset = 0;
+        int strength = 0; // Variable to store strength value
+
+        while (!hexFile.eof()) {
+            hexFile.seekg(offset);
+
+            char readData[patternLength];
+            hexFile.read(readData, patternLength);
+
+            if (hexFile.gcount() != patternLength) {
+                break; // Reached end of file or unable to read more bytes
+            }
+
+            if (memcmp(readData, desiredPattern, 4) == 0) {
+                patternFound = true;
+                offset += patternLength; // Move offset to the position after the pattern
+                break;
+            }
+            offset += 1; // Increment offset within the loop
+        }
+
+        if (patternFound) {
+            qDebug() << "Pattern found at offset" << (offset - static_cast<std::streampos>(patternLength));
+            offset += 239; // Set offset to 239 bytes after the pattern
+            qDebug() << "Offset set to" << offset;
+
+            hexFile.seekg(static_cast<std::streamoff>(offset) + 4); // Move to the new offset + 4 bytes
+            char newValue[1];
+            int stroffset, peroffset, endoffset, charoffset, intoffset, agiloffset, luckoffset;
+            stroffset = offset;
+            hexFile.write(reinterpret_cast<const char*>(&strnum), sizeof(strnum));
+            qDebug() << "Strength value:" << static_cast<int>(newValue[0]);
+            hexFile.seekg(static_cast<std::streamoff>(stroffset) + 4); // Move to the new offset + 4 bytes
+            peroffset = stroffset += 4;
+            hexFile.write(reinterpret_cast<const char*>(&pernum), sizeof(pernum));
+            qDebug() << "Perception value:" << static_cast<int>(newValue[0]);
+            hexFile.seekg(static_cast<std::streamoff>(peroffset) + 4); // Move to the new offset + 4 bytes
+            hexFile.write(reinterpret_cast<const char*>(&endnum), sizeof(endnum));
+            endoffset = peroffset += 4;
+            qDebug() << "Endurance value:" << static_cast<int>(newValue[0]);
+            hexFile.seekg(static_cast<std::streamoff>(endoffset) + 4); // Move to the new offset + 4 bytes
+            hexFile.write(reinterpret_cast<const char*>(&charnum), sizeof(charnum));
+            charoffset = endoffset += 4;
+            qDebug() << "Charisma value:" << static_cast<int>(newValue[0]);
+            hexFile.seekg(static_cast<std::streamoff>(charoffset) + 4); // Move to the new offset + 4 bytes
+            hexFile.write(reinterpret_cast<const char*>(&intnum), sizeof(intnum));
+            intoffset = charoffset += 4;
+            qDebug() <<  "Intelligence value:" << static_cast<int>(newValue[0]);
+            hexFile.seekg(static_cast<std::streamoff>(intoffset) + 4); // Move to the new offset + 4 bytes
+            hexFile.write(reinterpret_cast<const char*>(&aginum), sizeof(aginum));
+            agiloffset = intoffset += 4;
+            qDebug() << "Agility value:" << static_cast<int>(newValue[0]);
+            hexFile.seekg(static_cast<std::streamoff>(agiloffset) + 4); // Move to the new offset + 4 bytes
+            hexFile.write(reinterpret_cast<const char*>(&strnum), sizeof(strnum));
+            qDebug() << "Luck value:" << static_cast<int>(newValue[0]);
+        }
+        else
+        {
+            qDebug() << "Pattern not found";
+            qDebug() << "Desired pattern:" << desiredPattern;
+        }
+}
+
+}
+
+
