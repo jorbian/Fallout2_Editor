@@ -219,7 +219,7 @@ void MainWindow::on_load_file_clicked()
             offset += 239; // Set offset to 239 bytes after the pattern
             qDebug() << "Offset set to" << offset;
 
-            hexFile.seekg(static_cast<std::streamoff>(offset) + 4); // Move to the new offset + 4 bytes
+            hexFile.seekg(static_cast<std::streamoff>(offset)); // Move to the new offset + 4 bytes
             char newValue[1];
             int stroffset, peroffset, endoffset, charoffset, intoffset, agiloffset, luckoffset;
             stroffset = offset;
@@ -313,7 +313,7 @@ if (!filePath.isEmpty()) {
             offset += 239; // Set offset to 239 bytes after the pattern
             qDebug() << "Offset set to" << offset;
 
-            hexFile.seekg(static_cast<std::streamoff>(offset) + 4); // Move to the new offset + 4 bytes
+            hexFile.seekg(static_cast<std::streamoff>(offset)); // Move to the new offset + 4 bytes
             char newValue[1];
             int stroffset, peroffset, endoffset, charoffset, intoffset, agiloffset, luckoffset;
             stroffset = offset;
