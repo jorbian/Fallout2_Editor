@@ -4,6 +4,11 @@
 #include <QMainWindow>
 #include <QLabel>
 #include <QPixmap>
+#include <QDebug>
+#include <QFileDialog>
+#include <QPushButton>
+#include <fstream>
+#include <iostream>
 
 
 QT_BEGIN_NAMESPACE
@@ -47,8 +52,13 @@ private slots:
 
     void on_Luck_Down_clicked();
 
+    void on_load_file_clicked();
+
+    void on_apply_changes_clicked();
+
 private:
     Ui::MainWindow *ui;
     int strnum, pernum, endnum, charnum, intnum, aginum, lucknum;
+    QString filePath;
 };
 #endif // MAINWINDOW_H
